@@ -24,7 +24,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6" />
+            android:layout_weight="5" />
 
         <EditText
             android:id="@+id/phonenumber"
@@ -65,13 +65,15 @@
             android:layout_height="0dp"
             android:layout_weight="0.3" />
 
+
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/googlesignin"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:onClick="signIn"
             android:background="@color/black"
             android:text="SIGN IN WITH GOOGLE"
             android:textColor="@android:color/white"
