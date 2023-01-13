@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
 
-
+signInWithPhoneAuthCredential(credential)
 
             }
 
@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         val currentUser = auth.currentUser
+        Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
         updateUI(currentUser)
     }
     fun verifysignin(view: android.view.View) {
@@ -160,7 +161,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
-    // [END sign_in_with_phone]
+
 
     private fun updateUI(user: FirebaseUser? = auth.currentUser) {
 
@@ -175,11 +176,13 @@ class MainActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
-                    //updateUI(null)
+                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
+                    updateUI(null)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    //updateUI(null)
+                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
+                    updateUI(null)
                 }
             }
     }
@@ -221,11 +224,12 @@ class MainActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
-                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT)
+                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
