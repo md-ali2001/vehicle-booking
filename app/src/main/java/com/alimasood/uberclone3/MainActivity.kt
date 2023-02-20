@@ -149,6 +149,8 @@ signInWithPhoneAuthCredential(credential)
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
+                    val intent = Intent(this, afterlogin::class.java)
+                    startActivity(intent)
 
                     val user = task.result?.user
                 } else {
@@ -178,6 +180,8 @@ signInWithPhoneAuthCredential(credential)
                     val user = auth.currentUser
                     Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
                     updateUI(null)
+                    val intent = Intent(this, afterlogin::class.java)
+                    startActivity(intent)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -206,6 +210,8 @@ signInWithPhoneAuthCredential(credential)
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
+                val intent = Intent(this, afterlogin::class.java)
+                startActivity(intent)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
@@ -226,6 +232,8 @@ signInWithPhoneAuthCredential(credential)
                     val user = auth.currentUser
                     Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
                     updateUI(null)
+                    val intent = Intent(this, afterlogin::class.java)
+                    startActivity(intent)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
