@@ -94,8 +94,16 @@ signInWithPhoneAuthCredential(credential)
                 Log.d(TAG, "onCodeSent:$verificationId")
 
                 // Save verification ID and resending token so we can use them later
+
                 storedVerificationId = verificationId
                 resendToken = token
+
+                val intent=Intent(this@MainActivity,otpactivity::class.java)
+                intent.putExtra("OTP",storedVerificationId)
+               // intent.putExtra("token", resendToken)
+                startActivity(intent)
+                Log.d("otp", storedVerificationId!!)
+
             }
         }
 
@@ -137,10 +145,9 @@ signInWithPhoneAuthCredential(credential)
             .setTimeout(60L, java.util.concurrent.TimeUnit.SECONDS)
             .setActivity(this)
             .setCallbacks(callbacks)
-        if (token != null) {
-            optionsBuilder.setForceResendingToken(token) // callback's ForceResendingToken
-        }
-        PhoneAuthProvider.verifyPhoneNumber(optionsBuilder.build())
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(optionsBuilder)
+
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
@@ -149,8 +156,12 @@ signInWithPhoneAuthCredential(credential)
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
-                    val intent = Intent(this, afterlogin::class.java)
+
+                    val intent=Intent(this@MainActivity,otpactivity::class.java)
+                    intent.putExtra("OTP",storedVerificationId)
+                    //intent.putExtra("token", resendToken)
                     startActivity(intent)
+                    Log.d("otp", storedVerificationId!!)
 
                     val user = task.result?.user
                 } else {
@@ -178,10 +189,13 @@ signInWithPhoneAuthCredential(credential)
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
-                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
+                    Log.d("info", user.toString())
                     updateUI(null)
-                    val intent = Intent(this, afterlogin::class.java)
+                    val intent=Intent(this@MainActivity,otpactivity::class.java)
+                    intent.putExtra("OTP",storedVerificationId)
+                    //intent.putExtra("token", resendToken)
                     startActivity(intent)
+                    Log.d("otp", storedVerificationId!!)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -208,10 +222,14 @@ signInWithPhoneAuthCredential(credential)
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
+                Log.d("info", account.toString())
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
-                val intent = Intent(this, afterlogin::class.java)
+                val intent=Intent(this@MainActivity,otpactivity::class.java)
+                intent.putExtra("OTP",storedVerificationId)
+                //intent.putExtra("token", resendToken)
                 startActivity(intent)
+                Log.d("otp", storedVerificationId!!)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
@@ -230,10 +248,14 @@ signInWithPhoneAuthCredential(credential)
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
+                    Log.d("info", user.toString())
                     Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
                     updateUI(null)
-                    val intent = Intent(this, afterlogin::class.java)
+                    val intent=Intent(this@MainActivity,otpactivity::class.java)
+                    intent.putExtra("OTP",storedVerificationId)
+                  //  intent.putExtra("token", resendToken)
                     startActivity(intent)
+                    Log.d("otp", storedVerificationId!!)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -242,9 +264,7 @@ signInWithPhoneAuthCredential(credential)
                 }
             }
     }
-    // [END auth_with_google]
 
-    // [START signin]
      fun signIn(view: android.view.View) {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
