@@ -1,33 +1,27 @@
 package com.alimasood.uberclone3
 
 
-import android.content.ContentValues.TAG
 import android.content.Intent
-import android.icu.util.MeasureUnit
-import android.icu.util.TimeUnit
-
-import android.util.Log
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
-
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-
-
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -115,7 +109,7 @@ signInWithPhoneAuthCredential(credential)
 
         val currentUser = auth.currentUser
         Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
-        updateUI(currentUser)
+
     }
     fun verifysignin(view: android.view.View) {
 
@@ -159,7 +153,7 @@ signInWithPhoneAuthCredential(credential)
 
                     val intent=Intent(this@MainActivity,otpactivity::class.java)
                     intent.putExtra("OTP",storedVerificationId)
-                    //intent.putExtra("token", resendToken)
+
                     startActivity(intent)
                     Log.d("otp", storedVerificationId!!)
 
@@ -190,10 +184,10 @@ signInWithPhoneAuthCredential(credential)
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     Log.d("info", user.toString())
-                    updateUI(null)
-                    val intent=Intent(this@MainActivity,otpactivity::class.java)
-                    intent.putExtra("OTP",storedVerificationId)
-                    //intent.putExtra("token", resendToken)
+
+                    val intent=Intent(this@MainActivity,afterlogin::class.java)
+
+
                     startActivity(intent)
                     Log.d("otp", storedVerificationId!!)
                 } else {
@@ -213,6 +207,7 @@ signInWithPhoneAuthCredential(credential)
 
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -225,9 +220,9 @@ signInWithPhoneAuthCredential(credential)
                 Log.d("info", account.toString())
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
-                val intent=Intent(this@MainActivity,otpactivity::class.java)
-                intent.putExtra("OTP",storedVerificationId)
-                //intent.putExtra("token", resendToken)
+                val intent=Intent(this@MainActivity,afterlogin::class.java)
+
+
                 startActivity(intent)
                 Log.d("otp", storedVerificationId!!)
             } catch (e: ApiException) {
@@ -250,10 +245,11 @@ signInWithPhoneAuthCredential(credential)
                     val user = auth.currentUser
                     Log.d("info", user.toString())
                     Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
-                    updateUI(null)
-                    val intent=Intent(this@MainActivity,otpactivity::class.java)
-                    intent.putExtra("OTP",storedVerificationId)
-                  //  intent.putExtra("token", resendToken)
+
+                    val intent=Intent(this@MainActivity,afterlogin::class.java)
+
+
+
                     startActivity(intent)
                     Log.d("otp", storedVerificationId!!)
                 } else {
@@ -266,7 +262,15 @@ signInWithPhoneAuthCredential(credential)
     }
 
      fun signIn(view: android.view.View) {
-        val signInIntent = googleSignInClient.signInIntent
+
+         auth.signOut()
+
+         // Google sign out
+
+         // Google sign out
+         googleSignInClient.signOut().addOnCompleteListener(this,
+             OnCompleteListener<Void?> { updateUI(null) })
+                val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
