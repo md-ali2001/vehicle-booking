@@ -58,6 +58,7 @@ class otpactivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this,"access granted",Toast.LENGTH_LONG).show()
                     val intent=Intent(this@otpactivity,afterlogin::class.java)
+                    intent.putExtra("phoneloggedin","yes")
 
                     //intent.putExtra("token", resendToken)
                     startActivity(intent)

@@ -47,6 +47,32 @@ class MainActivity : AppCompatActivity() {
         phonenumber=findViewById(R.id.phonenumber)
         googlesignin=findViewById(R.id.googlesignin)
 
+        val logoutornot=intent.getStringExtra("log").toString()
+        val phoneloggedinornot=intent.getStringExtra("ph").toString()
+        if(logoutornot=="yes")
+        {
+            auth.signOut()
+
+            // Google sign out
+
+            // Google sign out
+
+            if(phoneloggedinornot=="no")
+            {googleSignInClient.signOut().addOnCompleteListener(this,
+                OnCompleteListener<Void?> {  })
+
+            }
+            else{
+
+
+            FirebaseAuth.getInstance().signOut()
+
+        }}
+        else{
+
+        }
+
+
 
         // ...
 
@@ -57,6 +83,26 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        if(logoutornot=="yes")
+        {
+            auth.signOut()
+
+            // Google sign out
+
+            // Google sign out
+            googleSignInClient.signOut().addOnCompleteListener(this,
+                OnCompleteListener<Void?> { updateUI(null) })
+            FirebaseAuth.getInstance().signOut()
+
+            Toast.makeText(this@MainActivity,"successfully logged out from all",Toast.LENGTH_SHORT).show()
+
+
+
+        }
+        else{
+
+        }
 
 
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -186,7 +232,7 @@ signInWithPhoneAuthCredential(credential)
                     Log.d("info", user.toString())
 
                     val intent=Intent(this@MainActivity,afterlogin::class.java)
-
+                    intent.putExtra("phoneloggedin","no")
 
                     startActivity(intent)
                     Log.d("otp", storedVerificationId!!)
@@ -221,7 +267,7 @@ signInWithPhoneAuthCredential(credential)
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
                 val intent=Intent(this@MainActivity,afterlogin::class.java)
-
+                intent.putExtra("phoneloggedin","no")
 
                 startActivity(intent)
                 Log.d("otp", storedVerificationId!!)
@@ -248,7 +294,7 @@ signInWithPhoneAuthCredential(credential)
 
                     val intent=Intent(this@MainActivity,afterlogin::class.java)
 
-
+                    intent.putExtra("phoneloggedin","no")
 
                     startActivity(intent)
                     Log.d("otp", storedVerificationId!!)
