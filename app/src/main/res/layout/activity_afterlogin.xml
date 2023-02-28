@@ -11,8 +11,29 @@
         android:layout_width="168dp"
         android:layout_height="58dp"
         android:text="sign out"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/driver"
+        android:layout_width="152dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/teal_200"
+        android:textColor="@android:color/black"
+        android:text="DRIVER"
+        app:iconTint="@color/teal_200"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <Button
+        android:id="@+id/bookride"
+        android:layout_width="152dp"
+        android:layout_height="56dp"
+        android:text="BOOK RIDE"
+        android:textColor="@android:color/black"
+        app:iconTint="@color/teal_200"
+        android:backgroundTint="@color/teal_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

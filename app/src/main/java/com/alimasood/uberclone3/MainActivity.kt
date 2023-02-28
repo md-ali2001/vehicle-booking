@@ -137,7 +137,7 @@ signInWithPhoneAuthCredential(credential)
 
                 storedVerificationId = verificationId
                 resendToken = token
-
+                finish();
                 val intent=Intent(this@MainActivity,otpactivity::class.java)
                 intent.putExtra("OTP",storedVerificationId)
                // intent.putExtra("token", resendToken)
@@ -166,7 +166,7 @@ signInWithPhoneAuthCredential(credential)
             .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
-        // [END start_phone_auth]
+
     }
 
     fun verifyPhoneNumberWithCode(verificationId: String?, code: String) {
@@ -196,7 +196,7 @@ signInWithPhoneAuthCredential(credential)
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
-
+                    finish();
                     val intent=Intent(this@MainActivity,otpactivity::class.java)
                     intent.putExtra("OTP",storedVerificationId)
 
@@ -230,7 +230,7 @@ signInWithPhoneAuthCredential(credential)
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     Log.d("info", user.toString())
-
+                    finish();
                     val intent=Intent(this@MainActivity,afterlogin::class.java)
                     intent.putExtra("phoneloggedin","no")
 
@@ -266,6 +266,7 @@ signInWithPhoneAuthCredential(credential)
                 Log.d("info", account.toString())
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
+                finish();
                 val intent=Intent(this@MainActivity,afterlogin::class.java)
                 intent.putExtra("phoneloggedin","no")
 
@@ -291,7 +292,7 @@ signInWithPhoneAuthCredential(credential)
                     val user = auth.currentUser
                     Log.d("info", user.toString())
                     Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
-
+                    finish();
                     val intent=Intent(this@MainActivity,afterlogin::class.java)
 
                     intent.putExtra("phoneloggedin","no")
