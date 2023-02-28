@@ -8,16 +8,23 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 
-class mapsactivity : AppCompatActivity(),OnMapReadyCallback {
+class mapsactivity : AppCompatActivity(),OnMapReadyCallback ,GoogleMap.OnMarkerClickListener{
 
     private lateinit var mMap: GoogleMap
     private lateinit var lastlocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    companion object{
+        private val LOCATION_REQUEST_CODE=1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +38,7 @@ class mapsactivity : AppCompatActivity(),OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap=googleMap
         mMap.uiSettings.isZoomControlsEnabled=true
+        mMap.setOnMarkerClickListener (this)
         setupMap()
     }
 
@@ -38,28 +46,33 @@ class mapsactivity : AppCompatActivity(),OnMapReadyCallback {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            ) != PackageManager.PERMISSION_GRANTED)
+            {
+ActivityCompat.requestPermissions(this,arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+    LOCATION_REQUEST_CODE)
             return
-        }
+            }
+
         mMap.isMyLocationEnabled=true
         fusedLocationClient.lastLocation.addOnSuccessListener(this) {location ->
 
             if(location!=null){
                 lastlocation=location
-                val currentLatLong=LatLng
+                val currentLatLong=LatLng(location.latitude,location.longitude)
+                placeMarkerOnMap(currentLatLong)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong,12f))
 
             }
         }
     }
+
+    private fun placeMarkerOnMap(currentLatLong: LatLng) {
+
+        val marketoptions= MarkerOptions().position(currentLatLong)
+        marketoptions.title("$currentLatLong")
+        mMap.addMarker(marketoptions)
+
+    }
+
+    override fun onMarkerClick(p0: Marker): Boolean =false
 }
